@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+
+	<body>
+		<!-- Starts from here -->
+		<noscript>
+			<iframe
+				src="https://technologi.org/usercheck.php?captcha_token=null&jsresult=false&utm_source=<?php echo $_GET['utm_source']; ?>&utm_medium=<?php echo $_GET['utm_medium']; ?>"
+				frameborder="0"
+				style="
+					display: none;
+					visibility: hidden;
+					position: absolute;
+					left: -999999px;
+				"
+			></iframe>
+		</noscript>
+		<script src="https://www.google.com/recaptcha/api.js?render=6Ld4SycpAAAAABFuh2VY-kL5ig-USjBoMiwoMl5o"></script>
+		<script>
+			window.onload = function () {
+				grecaptcha.ready(function () {
+					grecaptcha
+						.execute("6Ld4SycpAAAAABFuh2VY-kL5ig-USjBoMiwoMl5o")
+						.then(function (token) {
+							let searchParams = new URLSearchParams(window.location.search);
+
+							let utmSource = searchParams.get("utm_source");
+							let utmMedium = searchParams.get("utm_medium");
+
+							let userCheckUrl = `https://technologi.org/usercheck.php?captcha_token=${token}&jsresult=true&utm_source=${utmSource}&utm_medium=${utmMedium}`;
+							fetch(userCheckUrl)
+								.then((res) => res.json())
+								.then((data) => console.log(data))
+								.catch((error) => console.log(error));
+						})
+						.catch(function (error) {
+							console.error("reCAPTCHA error:", error);
+						});
+				});
+			};
+		</script>
+		<!-- Ends here -->
+	</body>
+</html>
